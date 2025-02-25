@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using FinSharkMarket.utils;
 
 namespace FinSharkMarket.models;
 
@@ -16,7 +17,7 @@ public class Comments
     // navigation property
     public Stocks? Stock { get; set; }
     // date fields
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public DateTime UpdatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTimeUtils.ToUtc(DateTime.Now);
+    public DateTime UpdatedAt { get; set; } = DateTimeUtils.ToUtc(DateTime.Now);
     
 }

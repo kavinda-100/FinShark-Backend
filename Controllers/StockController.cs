@@ -1,5 +1,7 @@
 ﻿using FinSharkMarket.data;
+using FinSharkMarket.Dtos.stocks;
 using FinSharkMarket.Mappers.stocks;
+using FinSharkMarket.models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,5 +39,16 @@ public class StockController : ControllerBase
         }
         
         return Ok(stock.ToStockDto());
+    }
+    
+    [HttpPost]
+    public async Task<ActionResult> CreateStock([FromBody] RequestStockDto resBody)
+    {
+        var stock = resBody.ToStock();
+        
+        await _context.Stocks.AddAsync(stock);
+        await _context.SaveChangesAsync();
+        
+        return CreatedAtAction(nameof(GetStockById), new { id = stock.Id }, stock.ToStockDto());
     }
 }

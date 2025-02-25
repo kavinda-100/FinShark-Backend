@@ -6,10 +6,11 @@ namespace FinSharkMarket.Mappers.stocks;
 public static class StockMappers
 {
     // Map Stocks to StockDto (Response body type)
-    public static StockDto ToStockDto(this Stocks stocks)
+    public static ResponseStockDto ToStockDto(this Stocks stocks)
     {
-        return new StockDto
+        return new ResponseStockDto
         {
+            Id = stocks.Id,
             Symbol = stocks.Symbol,
             CompanyName = stocks.CompanyName,
             Price = stocks.Price,
@@ -18,6 +19,20 @@ public static class StockMappers
             MarketCap = stocks.MarketCap,
             CreatedAt = stocks.CreatedAt,
             UpdatedAt = stocks.UpdatedAt
+        };
+    }
+    
+    // Map StockDto (Request body type) to Stocks
+    public static Stocks ToStock(this RequestStockDto stockDto)
+    {
+        return new Stocks
+        {
+            Symbol = stockDto.Symbol,
+            CompanyName = stockDto.CompanyName,
+            Price = stockDto.Price,
+            LastDiv = stockDto.LastDiv,
+            Industry = stockDto.Industry,
+            MarketCap = stockDto.MarketCap
         };
     }
 }

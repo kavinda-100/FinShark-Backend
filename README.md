@@ -18,6 +18,20 @@ dotnet add package Microsoft.EntityFrameworkCore.Tools
 }
 ```
 
+### since PostgresSQL Supports UTC time zone, we need to add the following code by creating a folder named **Utils** and adding a new class named **DateTimeUtils.cs**
+
+```csharp
+namespace FinSharkMarket.utils;
+
+public static class DateTimeUtils
+{
+    public static DateTime ToUtc(DateTime dateTime)
+    {
+        return DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+    }
+}
+```
+
 ### Models
 Stock.cs
 ```csharp
@@ -43,8 +57,8 @@ public class Stocks
     // relationships
     public List<Comments> Comments { get; set; } = new List<Comments>();
     // date fields
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public DateTime UpdatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTimeUtils.ToUtc(DateTime.Now);
+    public DateTime UpdatedAt { get; set; } = DateTimeUtils.ToUtc(DateTime.Now);
 }
 ```
 
@@ -68,8 +82,8 @@ public class Comments
     // navigation property
     public Stocks? Stock { get; set; }
     // date fields
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public DateTime UpdatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTimeUtils.ToUtc(DateTime.Now);
+    public DateTime UpdatedAt { get; set; } = DateTimeUtils.ToUtc(DateTime.Now);
 }
 ```
 
