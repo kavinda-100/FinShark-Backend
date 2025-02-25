@@ -21,6 +21,8 @@
 
     <ItemGroup>
       <Folder Include="Dtos\comments\" />
+      <Folder Include="interfaces\comments\" />
+      <Folder Include="Repository\comments\" />
     </ItemGroup>
 
 </Project>
