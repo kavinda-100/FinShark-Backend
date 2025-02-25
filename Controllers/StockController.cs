@@ -1,9 +1,7 @@
-﻿using FinSharkMarket.data;
-using FinSharkMarket.Dtos.stocks;
+﻿using FinSharkMarket.Dtos.stocks;
 using FinSharkMarket.interfaces.stocks;
 using FinSharkMarket.Mappers.stocks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace FinSharkMarket.Controllers;
 
