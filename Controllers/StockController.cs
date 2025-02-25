@@ -68,7 +68,7 @@ public class StockController : ControllerBase
         stock.Industry = resBody.Industry;
         stock.MarketCap = resBody.MarketCap;
         
-        _context.Stocks.Update(stock);
+        _context.Stocks.Update(stock); //* not an async method
         await _context.SaveChangesAsync();
         
         return Ok(stock.ToStockDto());
