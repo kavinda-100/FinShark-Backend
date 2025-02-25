@@ -30,7 +30,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //?     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseUrl"));
 //? });
 
-// Add repositorys
+// Add repository's
 builder.Services.AddScoped<IStockRepository, StockRepository>();
 
 var app = builder.Build();

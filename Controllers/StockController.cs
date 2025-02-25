@@ -11,12 +11,10 @@ namespace FinSharkMarket.Controllers;
 [ApiController]
 public class StockController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
     private readonly IStockRepository _stockRepository;
     
-    public StockController(ApplicationDbContext context, IStockRepository stockRepository)
+    public StockController(IStockRepository stockRepository)
     {
-        _context = context;
         _stockRepository = stockRepository;
     }
     
