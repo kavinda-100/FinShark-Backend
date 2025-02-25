@@ -33,7 +33,7 @@ public class StockController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetStockById([FromRoute] Guid id)
     {
-        var stock = await _context.Stocks.FindAsync(id);
+        var stock = await _stockRepository.GetStockByIdAsync(id);
         
         if (stock == null)
         {
@@ -48,8 +48,7 @@ public class StockController : ControllerBase
     {
         var stock = resBody.ToStock();
         
-        await _context.Stocks.AddAsync(stock);
-        await _context.SaveChangesAsync();
+        await _stockRepository.CreateStockAsync(stock);
         
         return CreatedAtAction(nameof(GetStockById), new { id = stock.Id }, stock.ToStockDto());
     }
@@ -57,22 +56,12 @@ public class StockController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateStock([FromRoute] Guid id, [FromBody] UpdateRequestStockDto resBody)
     {
-        var stock = await _context.Stocks.FindAsync(id);
+        var stock = await _stockRepository.UpdateStockAsync(id, resBody);
         
         if (stock == null)
         {
             return NotFound("Stock not found");
         }
-        
-        stock.Symbol = resBody.Symbol;
-        stock.CompanyName = resBody.CompanyName;
-        stock.Price = resBody.Price;
-        stock.LastDiv = resBody.LastDiv;
-        stock.Industry = resBody.Industry;
-        stock.MarketCap = resBody.MarketCap;
-        
-        _context.Stocks.Update(stock); //* not an async method
-        await _context.SaveChangesAsync();
         
         return Ok(stock.ToStockDto());
     }
@@ -80,15 +69,12 @@ public class StockController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteStock([FromRoute] Guid id)
     {
-        var stock = await _context.Stocks.FindAsync(id);
+        var stock = await _stockRepository.DeleteStockAsync(id);
         
         if (stock == null)
         {
             return NotFound("Stock not found");
         }
-        
-        _context.Stocks.Remove(stock); //* not an async method
-        await _context.SaveChangesAsync();
         
         return NoContent();
     }
