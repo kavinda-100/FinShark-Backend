@@ -15,7 +15,9 @@ public static class StockMappers
             Price = stocks.Price,
             LastDiv = stocks.LastDiv,
             Industry = stocks.Industry,
-            MarketCap = stocks.MarketCap
+            MarketCap = stocks.MarketCap,
+            CreatedAt = stocks.CreatedAt,
+            UpdatedAt = stocks.UpdatedAt
         };
     }
 }
