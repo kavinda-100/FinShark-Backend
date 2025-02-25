@@ -6,7 +6,9 @@ public class Comments
 {
     [Column(TypeName = "uuid")]
     public Guid Id { get; set; }
+    [Column(TypeName = "varchar(255)")]
     public String Title { get; set; } = String.Empty;
+    [Column(TypeName = "varchar(255)")]
     public String Content { get; set; } = String.Empty;
     // foreign key (stock id)
     [Column(TypeName = "uuid")]

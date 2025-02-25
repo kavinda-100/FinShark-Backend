@@ -16,11 +16,11 @@ namespace FinSharkMarket.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Symbol = table.Column<string>(type: "text", nullable: false),
-                    CompanyName = table.Column<string>(type: "text", nullable: false),
+                    Symbol = table.Column<string>(type: "varchar(255)", nullable: false),
+                    CompanyName = table.Column<string>(type: "varchar(255)", nullable: false),
                     Price = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     LastDiv = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    Industry = table.Column<string>(type: "text", nullable: false),
+                    Industry = table.Column<string>(type: "varchar(255)", nullable: false),
                     MarketCap = table.Column<long>(type: "bigint", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -35,8 +35,8 @@ namespace FinSharkMarket.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: false),
+                    Title = table.Column<string>(type: "varchar(255)", nullable: false),
+                    Content = table.Column<string>(type: "varchar(255)", nullable: false),
                     StockId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
