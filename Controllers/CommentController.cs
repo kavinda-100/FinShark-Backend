@@ -53,4 +53,17 @@ public class CommentController: ControllerBase
         
         return CreatedAtAction(nameof(GetCommentById), new { id = comment.Id }, comment.ToResponseCommentDto());
     }
+
+    [HttpPut("{commentId}")]
+    public async Task<IActionResult> UpdateComment([FromRoute] Guid commentId, UpdateRequestCommentDto updateDto)
+    {
+        var updatedComment = await _commentRepository.UpdateCommentAsync(updateDto.ToUpdateComment(), commentId);
+        
+        if (updatedComment == null)
+        {
+            return NotFound("Comment not found");
+        }
+        
+        return Ok(updatedComment.ToResponseCommentDto());
+    }
 }

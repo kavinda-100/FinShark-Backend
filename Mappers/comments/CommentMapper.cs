@@ -19,7 +19,7 @@ public static class CommentMapper
         };
     }
     
-    // Request Type
+    // Post Request Type
     public static Comments ToComment(this RequestCommentDto commentDto, Guid stockId)
     {
         return new Comments
@@ -27,6 +27,16 @@ public static class CommentMapper
             Title = commentDto.Title,
             Content = commentDto.Content,
             StockId = stockId
+        };
+    }
+    
+    // Update Request Type
+    public static Comments ToUpdateComment(this UpdateRequestCommentDto commentDto)
+    {
+        return new Comments
+        {
+            Title = commentDto.Title,
+            Content = commentDto.Content,
         };
     }
 }

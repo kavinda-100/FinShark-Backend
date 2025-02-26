@@ -32,4 +32,21 @@ public class CommentRepository: ICommentRepository
         await _context.SaveChangesAsync();
         return comment;
     }
+
+    public async Task<Comments?> UpdateCommentAsync(Comments comment, Guid id)
+    {
+        var existingComment = await _context.Comments.FindAsync(id);
+        if (existingComment == null)
+        {
+            return null;
+        }
+        
+        existingComment.Title = comment.Title;
+        existingComment.Content = comment.Content;
+        
+        _context.Comments.Update(existingComment);
+        await _context.SaveChangesAsync();
+        
+        return existingComment;
+    }
 }
