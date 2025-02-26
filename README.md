@@ -5,9 +5,14 @@ This is the backend for the FinShark Stock Market project. It is a RESTful API t
 ### Installed Packages
 
 ```bash
+// for db
 dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
 dotnet add package Microsoft.EntityFrameworkCore.Design
 dotnet add package Microsoft.EntityFrameworkCore.Tools
+
+// for prevent object cycle
+dotnet add package Newtonsoft.json
+dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson
 ```
 
 ### Database Connection
@@ -17,6 +22,16 @@ dotnet add package Microsoft.EntityFrameworkCore.Tools
     "DatabaseUrl": "Host=localhost; Database=FinSharkDb; Username=postgres; Password=your_password"
 }
 ```
+
+### Add the following code to the Program.cs file
+
+```csharp
+// prevent object cycle
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+});
+ ```
 
 ### since PostgresSQL Supports UTC time zone, we need to add the following code by creating a folder named **Utils** and adding a new class named **DateTimeUtils.cs**
 
