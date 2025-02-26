@@ -19,10 +19,4 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Dtos\comments\" />
-      <Folder Include="interfaces\comments\" />
-      <Folder Include="Repository\comments\" />
-    </ItemGroup>
-
 </Project>

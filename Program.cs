@@ -1,5 +1,7 @@
 using FinSharkMarket.data;
+using FinSharkMarket.interfaces.comments;
 using FinSharkMarket.interfaces.stocks;
+using FinSharkMarket.Repository.comments;
 using FinSharkMarket.Repository.stocks;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +34,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Add repository's
 builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 var app = builder.Build();
 
