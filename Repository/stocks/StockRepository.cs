@@ -20,13 +20,13 @@ public class StockRepository : IStockRepository
     // get all stocks
     public async Task<List<Stocks>> GetAllStocksAsync()
     {
-        return await _context.Stocks.ToListAsync();
+        return await _context.Stocks.Include(c => c.Comments).ToListAsync();
     }
 
     // get stock by id
     public async Task<Stocks?> GetStockByIdAsync(Guid id)
     {
-        var stock = await _context.Stocks.FindAsync(id);
+        var stock = await _context.Stocks.Include(c => c.Comments).FirstOrDefaultAsync(s => s.Id == id);
         
         return stock;
     }

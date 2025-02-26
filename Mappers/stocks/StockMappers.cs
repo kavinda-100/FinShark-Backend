@@ -1,4 +1,5 @@
 ﻿using FinSharkMarket.Dtos.stocks;
+using FinSharkMarket.Mappers.comments;
 using FinSharkMarket.models;
 
 namespace FinSharkMarket.Mappers.stocks;
@@ -17,6 +18,7 @@ public static class StockMappers
             LastDiv = stocks.LastDiv,
             Industry = stocks.Industry,
             MarketCap = stocks.MarketCap,
+            Comments = stocks.Comments,
             CreatedAt = stocks.CreatedAt,
             UpdatedAt = stocks.UpdatedAt
         };
@@ -32,7 +34,7 @@ public static class StockMappers
             Price = stockDto.Price,
             LastDiv = stockDto.LastDiv,
             Industry = stockDto.Industry,
-            MarketCap = stockDto.MarketCap
+            MarketCap = stockDto.MarketCap,
         };
     }
 }

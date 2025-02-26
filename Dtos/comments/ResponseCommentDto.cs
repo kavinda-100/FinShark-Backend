@@ -11,6 +11,6 @@ public class ResponseCommentDto
     // foreign key (stock id)
     public Guid StockId { get; set; }
     // date fields
-    public DateTime CreatedAt { get; set; } = DateTimeUtils.ToUtc(DateTime.Now);
-    public DateTime UpdatedAt { get; set; } = DateTimeUtils.ToUtc(DateTime.Now);
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 }
