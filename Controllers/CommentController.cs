@@ -1,4 +1,6 @@
-﻿using FinSharkMarket.interfaces.comments;
+﻿using FinSharkMarket.Dtos.comments;
+using FinSharkMarket.interfaces.comments;
+using FinSharkMarket.interfaces.stocks;
 using FinSharkMarket.Mappers.comments;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,16 +11,18 @@ namespace FinSharkMarket.Controllers;
 public class CommentController: ControllerBase
 {
     private readonly ICommentRepository _commentRepository;
+    private readonly IStockRepository _stockRepository;
     
-    public CommentController(ICommentRepository commentRepository)
+    public CommentController(ICommentRepository commentRepository, IStockRepository stockRepository)
     {
         _commentRepository = commentRepository;
+        _stockRepository = stockRepository;
     }
     
     [HttpGet]
     public async Task<IActionResult> GetAllComments()
     {
-        var comments = await _commentRepository.GetAllComments();
+        var comments = await _commentRepository.GetAllCommentsAsync();
         var response = comments.Select(c => c.ToResponseCommentDto());
         return Ok(response);
     }
@@ -26,12 +30,27 @@ public class CommentController: ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCommentById([FromRoute] Guid id)
     {
-        var comment = await _commentRepository.GetCommentById(id);
+        var comment = await _commentRepository.GetCommentByIdAsync(id);
         if (comment == null)
         {
             return NotFound("Comment not found");
         }
         var response = comment.ToResponseCommentDto();
         return Ok(response);
+    }
+
+    [HttpPost("{stockId}")]
+    public async Task<IActionResult> CreateComment([FromRoute] Guid stockId, RequestCommentDto commentDto)
+    {
+        bool stockExists = await _stockRepository.StockExists(stockId);
+        if (!stockExists)
+        {
+            return BadRequest("Stock not found");
+        }
+        
+        var comment = commentDto.ToComment(stockId);
+        await _commentRepository.CreateCommentAsync(comment);
+        
+        return CreatedAtAction(nameof(GetCommentById), new { id = comment.Id }, comment.ToResponseCommentDto());
     }
 }

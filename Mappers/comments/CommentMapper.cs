@@ -18,4 +18,15 @@ public static class CommentMapper
             UpdatedAt = comment.UpdatedAt
         };
     }
+    
+    // Request Type
+    public static Comments ToComment(this RequestCommentDto commentDto, Guid stockId)
+    {
+        return new Comments
+        {
+            Title = commentDto.Title,
+            Content = commentDto.Content,
+            StockId = stockId
+        };
+    }
 }

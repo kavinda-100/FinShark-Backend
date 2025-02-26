@@ -14,16 +14,22 @@ public class CommentRepository: ICommentRepository
         _context = context;
     }
     
-    public async Task<List<Comments>> GetAllComments()
+    public async Task<List<Comments>> GetAllCommentsAsync()
     {
         var comments = await _context.Comments.ToListAsync();
         return comments;
     }
 
-    public async Task<Comments?> GetCommentById(Guid id)
+    public async Task<Comments?> GetCommentByIdAsync(Guid id)
     {
         var comment = await _context.Comments.FindAsync(id);
-        
+        return comment;
+    }
+
+    public async Task<Comments> CreateCommentAsync(Comments comment)
+    {
+        await _context.Comments.AddAsync(comment);
+        await _context.SaveChangesAsync();
         return comment;
     }
 }
