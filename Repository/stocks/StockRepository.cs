@@ -52,8 +52,12 @@ public class StockRepository : IStockRepository
                 stock = query.IsDescending ? stock.OrderByDescending(s => s.Industry) : stock.OrderBy(s => s.Industry);
             }
         }
+        
+        // pagination
+        var skipNumber = (query.PageNumber - 1) * query.PageSize;
+        
         // return all stocks
-        return await stock.ToListAsync();
+        return await stock.Skip(skipNumber).Take(query.PageSize).ToListAsync();
     }
 
     // get stock by id
