@@ -1,6 +1,7 @@
 ﻿using FinSharkMarket.Dtos.stocks;
 using FinSharkMarket.interfaces.stocks;
 using FinSharkMarket.Mappers.stocks;
+using FinSharkMarket.QueryParams;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinSharkMarket.Controllers;
@@ -17,7 +18,7 @@ public class StockController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetAllStocks()
+    public async Task<IActionResult> GetAllStocks([FromQuery] StockQuery query)
     {
         // Check if the model/data is valid
         if (!ModelState.IsValid)
@@ -25,7 +26,7 @@ public class StockController : ControllerBase
             return BadRequest(ModelState);
         }
         
-        var stocks = await _stockRepository.GetAllStocksAsync();
+        var stocks = await _stockRepository.GetAllStocksAsync(query);
         // Map Stocks to StockDto
         var stockDtos = stocks.Select(stock => stock.ToStockDto());
         
