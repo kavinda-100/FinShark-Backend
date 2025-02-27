@@ -22,6 +22,12 @@ public class CommentController: ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllComments()
     {
+        // Check if the model/data is valid
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
         var comments = await _commentRepository.GetAllCommentsAsync();
         var response = comments.Select(c => c.ToResponseCommentDto());
         return Ok(response);
@@ -30,6 +36,12 @@ public class CommentController: ControllerBase
     [HttpGet("{id:Guid}")]
     public async Task<IActionResult> GetCommentById([FromRoute] Guid id)
     {
+        // Check if the model/data is valid
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
         var comment = await _commentRepository.GetCommentByIdAsync(id);
         if (comment == null)
         {
@@ -42,6 +54,12 @@ public class CommentController: ControllerBase
     [HttpPost("{stockId:Guid}")]
     public async Task<IActionResult> CreateComment([FromRoute] Guid stockId, RequestCommentDto commentDto)
     {
+        // Check if the model/data is valid
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
         bool stockExists = await _stockRepository.StockExists(stockId);
         if (!stockExists)
         {
@@ -57,6 +75,12 @@ public class CommentController: ControllerBase
     [HttpPut("{commentId:Guid}")]
     public async Task<IActionResult> UpdateComment([FromRoute] Guid commentId, UpdateRequestCommentDto updateDto)
     {
+        // Check if the model/data is valid
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
         var updatedComment = await _commentRepository.UpdateCommentAsync(updateDto.ToUpdateComment(), commentId);
         
         if (updatedComment == null)
@@ -70,6 +94,12 @@ public class CommentController: ControllerBase
     [HttpDelete("{commentId:Guid}")]
     public async Task<IActionResult> DeleteComment([FromRoute] Guid commentId)
     {
+        // Check if the model/data is valid
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
         var comment = await _commentRepository.DeleteCommentAsync(commentId);
         if (comment == null)
         {
