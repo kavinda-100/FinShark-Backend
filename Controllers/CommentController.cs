@@ -27,7 +27,7 @@ public class CommentController: ControllerBase
         return Ok(response);
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("{id:Guid}")]
     public async Task<IActionResult> GetCommentById([FromRoute] Guid id)
     {
         var comment = await _commentRepository.GetCommentByIdAsync(id);
@@ -39,7 +39,7 @@ public class CommentController: ControllerBase
         return Ok(response);
     }
 
-    [HttpPost("{stockId}")]
+    [HttpPost("{stockId:Guid}")]
     public async Task<IActionResult> CreateComment([FromRoute] Guid stockId, RequestCommentDto commentDto)
     {
         bool stockExists = await _stockRepository.StockExists(stockId);
@@ -54,7 +54,7 @@ public class CommentController: ControllerBase
         return CreatedAtAction(nameof(GetCommentById), new { id = comment.Id }, comment.ToResponseCommentDto());
     }
 
-    [HttpPut("{commentId}")]
+    [HttpPut("{commentId:Guid}")]
     public async Task<IActionResult> UpdateComment([FromRoute] Guid commentId, UpdateRequestCommentDto updateDto)
     {
         var updatedComment = await _commentRepository.UpdateCommentAsync(updateDto.ToUpdateComment(), commentId);
@@ -67,7 +67,7 @@ public class CommentController: ControllerBase
         return Ok(updatedComment.ToResponseCommentDto());
     }
     
-    [HttpDelete("{commentId}")]
+    [HttpDelete("{commentId:Guid}")]
     public async Task<IActionResult> DeleteComment([FromRoute] Guid commentId)
     {
         var comment = await _commentRepository.DeleteCommentAsync(commentId);
