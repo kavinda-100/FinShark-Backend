@@ -3,7 +3,9 @@ using FinSharkMarket.interfaces.comments;
 using FinSharkMarket.interfaces.stocks;
 using FinSharkMarket.Repository.comments;
 using FinSharkMarket.Repository.stocks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -14,57 +16,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    var authority = builder.Configuration["Authentication:Schemes:Bearer:Authority"];
-    options.AddSecurityDefinition(
-        "oidc",
-        new OpenApiSecurityScheme
-        {
-            Type = SecuritySchemeType.OpenIdConnect,
-            OpenIdConnectUrl = new Uri(authority + "/.well-known/openid-configuration")
-        }
-    );
+builder.Services.AddSwaggerGen();
 
-    options.AddSecurityRequirement(
-        new OpenApiSecurityRequirement
-        {
-            {
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                        { Type = ReferenceType.SecurityScheme, Id = "oidc" },
-                },
-                new string[] { }
-            }
-        }
-    );
-});
-
-// Kinde Auth setup
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+// Kinde auth services
+builder.Services.AddAuthentication(options =>
     {
-        // These two lines map the Kinde user ID to Identity.Name (optional).
-        options.MapInboundClaims = false;
-        options.TokenValidationParameters.NameClaimType = "sub";
-    });
-
-builder.Services
-    .AddAuthorization(options =>
-    {
-        options.AddPolicy("ReadPermission",
-            policy => policy.RequireAssertion(
-                context => context.User.Claims.Any(c => c.Type == "permissions" && c.Value == "read:data")
-            ));
-        options.AddPolicy("AdminRole",
-            policy => policy.RequireAssertion(
-                context => context.User.Claims.Any(c => c.Type == "roles" && c.Value == "admin")
-            ));
-        options.AddPolicy("UserRole",
-            policy => policy.RequireAssertion(
-                context => context.User.Claims.Any(c => c.Type == "roles" && c.Value == "user")
-            ));
-    });
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+    })
+    .AddCookie()
+    .AddOpenIdConnect();
 
 // prevent object cycle
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
