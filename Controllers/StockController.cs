@@ -2,6 +2,7 @@
 using FinSharkMarket.interfaces.stocks;
 using FinSharkMarket.Mappers.stocks;
 using FinSharkMarket.QueryParams;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinSharkMarket.Controllers;
@@ -17,6 +18,7 @@ public class StockController : ControllerBase
         _stockRepository = stockRepository;
     }
     
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetAllStocks([FromQuery] StockQuery query)
     {
