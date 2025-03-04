@@ -159,3 +159,14 @@ dotnet tool install --global dotnet-ef
 ```bash
 dotnet run
 ```
+
+
+## FinShark Stock Market Authentication
+
+### Installed Packages
+
+```bash
+ditnet add package Microsoft.Extensions.Identity.Core
+ditnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
+ditnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+```
