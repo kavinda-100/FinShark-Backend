@@ -170,3 +170,87 @@ dotnet add package Microsoft.Extensions.Identity.Core
 dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
 dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
 ```
+
+### Models (Inherit from IdentityUser so we can customize the user model later like adding more fields)
+In the models folder, create a new class named **AppUser.cs**
+```csharp
+using Microsoft.AspNetCore.Identity;
+
+namespace FinSharkMarket.models;
+
+public class AppUser: IdentityUser
+{
+    
+}
+```
+
+### Modify the ApplicationDbContext.cs file to inherit from IdentityDbContext
+
+```csharp
+using FinSharkMarket.models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+namespace FinSharkMarket.data;
+
+public class ApplicationDbContext : IdentityDbContext<AppUser>
+{
+    public ApplicationDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
+    {
+        
+    }
+    
+    public DbSet<Stocks> Stocks { get; set; }
+    public DbSet<Comments> Comments { get; set; }
+}
+```
+
+### Add the following code to the Program.cs file
+
+```csharp
+// Identity Configuration
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+    // Password settings for the user (in this case, keeping it simple)
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+}).AddEntityFrameworkStores<ApplicationDbContext>();
+// Add Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = 
+        options.DefaultChallengeScheme =
+            options.DefaultForbidScheme =
+                options.DefaultScheme = 
+                    options.DefaultSignInScheme = 
+                        options.DefaultSignOutScheme = 
+                            JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    // token validation parameters
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey =
+            new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SignInKey"]!))
+    };
+});
+```
+
+### Add the following code to the appsettings.json file
+
+```json
+"Jwt": {
+"Issuer": "https://localhost:7231",
+"Audience": "https://localhost:7231",
+"SignInKey": "your_secret_key"
+}
+```
+Make sure to replace your_secret_key with a secret key of your choice. and change the port number to the one you are using.
