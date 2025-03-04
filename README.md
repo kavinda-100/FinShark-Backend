@@ -23,7 +23,7 @@ dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson
 }
 ```
 
-### Add the following code to the Program.cs file
+### Add the following code to the `Program.cs` file
 
 ```csharp
 // prevent object cycle
@@ -33,7 +33,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 });
  ```
 
-### since PostgresSQL Supports UTC time zone, we need to add the following code by creating a folder named **Utils** and adding a new class named **DateTimeUtils.cs**
+### since _`PostgresSQL Supports UTC time zone`_, we need to add the following code by creating a folder named **Utils** and adding a new class named **DateTimeUtils.cs**
 
 ```csharp
 namespace FinSharkMarket.utils;
@@ -48,7 +48,7 @@ public static class DateTimeUtils
 ```
 
 ### Models
-Stock.cs
+`Stock.cs`
 ```csharp
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -77,7 +77,7 @@ public class Stocks
 }
 ```
 
-Comments.cs
+`Comments.cs`
 ```csharp
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -102,7 +102,7 @@ public class Comments
 }
 ```
 
-### create a new folder named **Data** and add a new class named **ApplicationDbContext.cs**
+### create a new folder named `Data` and add a new class named `ApplicationDbContext.cs`
 
 ```csharp
 using FinSharkMarket.models;
@@ -122,7 +122,7 @@ public class ApplicationDbContext : DbContext
 }
 ```
 
-### add the following to the Program.cs file
+### add the following to the `Program.cs` file
 
 ```csharp
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -148,7 +148,7 @@ dotnet ef migrations add comment // no colons ("comment" 🚨)
 dotnet ef database update
 ```
 
-### if dotnet ef is not found - install the following package
+### if `dotnet ef` is not found - install the following package
 
 ```bash
 dotnet tool install --global dotnet-ef
@@ -161,7 +161,7 @@ dotnet run
 ```
 
 
-## FinShark Stock Market Authentication
+## FinShark Stock Market `Authentication`
 
 ### Installed Packages
 
@@ -171,8 +171,8 @@ dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
 dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
 ```
 
-### Models (Inherit from IdentityUser so we can customize the user model later like adding more fields)
-In the models folder, create a new class named **AppUser.cs**
+### Models (Inherit from `IdentityUser` so we can customize the user model later like adding more fields)
+In the `models folder`, create a new class named `AppUser.cs`
 ```csharp
 using Microsoft.AspNetCore.Identity;
 
@@ -184,7 +184,7 @@ public class AppUser: IdentityUser
 }
 ```
 
-### Modify the ApplicationDbContext.cs file to inherit from IdentityDbContext
+### Modify the `ApplicationDbContext.cs` file to inherit from IdentityDbContext
 
 ```csharp
 using FinSharkMarket.models;
@@ -221,7 +221,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
 }
 ```
 
-### Add the following code to the Program.cs file
+### Add the following code to the `Program.cs` file
 
 ```csharp
 // Identity Configuration
@@ -260,7 +260,7 @@ builder.Services.AddAuthentication(options =>
 });
 ```
 
-### Add the following code to the appsettings.json file
+### Add the following code to the `appsettings.json` file
 
 ```json
 "Jwt": {
@@ -269,4 +269,8 @@ builder.Services.AddAuthentication(options =>
 "SignInKey": "your_secret_key"
 }
 ```
-Make sure to replace your_secret_key with a secret key of your choice. and change the port number to the one you are using.
+> Make sure to replace `your_secret_key` with a secret key of your choice. 
+  and change the `port number` to the one you are using.
+
+> [!NOTE]
+> For see the `Register and LogIn Routes` Implementation, Please go to the folder name called `Controllers` and open the `AccountController.cs` file.
