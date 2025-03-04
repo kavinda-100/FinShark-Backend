@@ -1,9 +1,13 @@
 using FinSharkMarket.data;
 using FinSharkMarket.interfaces.comments;
 using FinSharkMarket.interfaces.stocks;
+using FinSharkMarket.models;
 using FinSharkMarket.Repository.comments;
 using FinSharkMarket.Repository.stocks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +29,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseUrl"));
 });
-
 //* Same thing as above,
 // The main difference between the two lines is that
 // the second one explicitly adds the
@@ -37,6 +40,41 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //? {
 //?     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseUrl"));
 //? });
+
+// Identity Configuration
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+    // Password settings for the user (in this case, keeping it simple)
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+}).AddEntityFrameworkStores<ApplicationDbContext>();
+// Add Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = 
+        options.DefaultChallengeScheme =
+            options.DefaultForbidScheme =
+                options.DefaultScheme = 
+                    options.DefaultSignInScheme = 
+                        options.DefaultSignOutScheme = 
+                            JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    // token validation parameters
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey =
+            new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SignInKey"]!))
+    };
+});
 
 // Add repository's
 builder.Services.AddScoped<IStockRepository, StockRepository>();
@@ -53,6 +91,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthorization();
 app.UseAuthorization();
 
 app.MapControllers();
