@@ -3,6 +3,7 @@ using FinSharkMarket.utils;
 
 namespace FinSharkMarket.models;
 
+[Table("Stocks")]
 public class Stocks
 {
     [Column(TypeName = "uuid")]
@@ -20,6 +21,7 @@ public class Stocks
     public long MarketCap { get; set; }
     // relationships
     public List<Comments> Comments { get; set; } = new List<Comments>();
+    public List<PortFolio> PortFolios { get; set; } = new List<PortFolio>();
     // date fields
     public DateTime CreatedAt { get; set; } = DateTimeUtils.ToUtc(DateTime.Now);
     public DateTime UpdatedAt { get; set; } = DateTimeUtils.ToUtc(DateTime.Now);

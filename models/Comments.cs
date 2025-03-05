@@ -3,6 +3,7 @@ using FinSharkMarket.utils;
 
 namespace FinSharkMarket.models;
 
+[Table("Comments")]
 public class Comments
 {
     [Column(TypeName = "uuid")]

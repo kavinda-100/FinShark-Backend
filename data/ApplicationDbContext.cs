@@ -14,11 +14,25 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     
     public DbSet<Stocks> Stocks { get; set; }
     public DbSet<Comments> Comments { get; set; }
+    public DbSet<PortFolio> PortFolios { get; set; }
     
     // add the roles
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        
+        // create a many-to-many relationship
+        builder.Entity<PortFolio>(x => x.HasKey(p => new {p.AppUserId, p.StockId}));
+        // connect to them to the tables
+        builder.Entity<PortFolio>()
+            .HasOne(u => u.AppUser)
+            .WithMany(s => s.PortFolios)
+            .HasForeignKey(u => u.AppUserId);
+        
+        builder.Entity<PortFolio>()
+            .HasOne(u => u.Stock)
+            .WithMany(s => s.PortFolios)
+            .HasForeignKey(u => u.StockId);
         
         // create the roles
         List<IdentityRole> roles = new List<IdentityRole>()
