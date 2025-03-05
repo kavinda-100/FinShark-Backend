@@ -1,9 +1,11 @@
 using FinSharkMarket.data;
 using FinSharkMarket.interfaces.comments;
+using FinSharkMarket.interfaces.PortFolios;
 using FinSharkMarket.interfaces.services;
 using FinSharkMarket.interfaces.stocks;
 using FinSharkMarket.models;
 using FinSharkMarket.Repository.comments;
+using FinSharkMarket.Repository.PortFolios;
 using FinSharkMarket.Repository.stocks;
 using FinSharkMarket.services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -111,6 +113,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IPortFolioRepository, PortFolioRepository>();
 
 var app = builder.Build();
 
