@@ -1,8 +1,11 @@
 ﻿using FinSharkMarket.Dtos.comments;
+using FinSharkMarket.Extensions;
 using FinSharkMarket.interfaces.comments;
 using FinSharkMarket.interfaces.stocks;
 using FinSharkMarket.Mappers.comments;
+using FinSharkMarket.models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinSharkMarket.Controllers;
@@ -13,11 +16,13 @@ public class CommentController: ControllerBase
 {
     private readonly ICommentRepository _commentRepository;
     private readonly IStockRepository _stockRepository;
+    private readonly UserManager<AppUser> _userManager;
     
-    public CommentController(ICommentRepository commentRepository, IStockRepository stockRepository)
+    public CommentController(ICommentRepository commentRepository, IStockRepository stockRepository, UserManager<AppUser> userManager)
     {
         _commentRepository = commentRepository;
         _stockRepository = stockRepository;
+        _userManager = userManager;
     }
     
     [HttpGet]
@@ -69,8 +74,15 @@ public class CommentController: ControllerBase
         {
             return BadRequest("Stock not found");
         }
+
+        var email = User.GetUserEmail();
+        if(email == null) return Unauthorized();
+        var user = await _userManager.FindByEmailAsync(email);
+        if(user == null) return Unauthorized();
         
         var comment = commentDto.ToComment(stockId);
+        // Set the user id
+        comment.AppUserId = user.Id;
         await _commentRepository.CreateCommentAsync(comment);
         
         return CreatedAtAction(nameof(GetCommentById), new { id = comment.Id }, comment.ToResponseCommentDto());

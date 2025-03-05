@@ -30,7 +30,7 @@ public class StockController : ControllerBase
         
         var stocks = await _stockRepository.GetAllStocksAsync(query);
         // Map Stocks to StockDto
-        var stockDtos = stocks.Select(stock => stock.ToStockDto());
+        var stockDtos = stocks.Select(stock => stock.ToStockDto()).ToList();
         
         return Ok(stockDtos);
     }

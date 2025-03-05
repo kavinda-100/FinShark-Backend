@@ -14,6 +14,7 @@ public static class CommentMapper
             Title = comment.Title,
             Content = comment.Content,
             StockId = comment.StockId,
+            CrateBy = comment.AppUser.Email,
             CreatedAt = comment.CreatedAt,
             UpdatedAt = comment.UpdatedAt
         };

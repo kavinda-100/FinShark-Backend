@@ -15,8 +15,10 @@ public class Comments
     // foreign key (stock id)
     [Column(TypeName = "uuid")]
     public Guid StockId { get; set; }
+    public String AppUserId { get; set; }
     // navigation property
     public Stocks? Stock { get; set; }
+    public AppUser AppUser { get; set; }
     // date fields
     public DateTime CreatedAt { get; set; } = DateTimeUtils.ToUtc(DateTime.Now);
     public DateTime UpdatedAt { get; set; } = DateTimeUtils.ToUtc(DateTime.Now);
