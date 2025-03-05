@@ -1,4 +1,5 @@
 ﻿using FinSharkMarket.Dtos.Account;
+using FinSharkMarket.interfaces.services;
 using FinSharkMarket.models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,14 @@ namespace FinSharkMarket.Controllers;
 public class AccountController: ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
+    private readonly SignInManager<AppUser> _signInManager;
+    private readonly ITokenService _tokenService;
     
-    public AccountController(UserManager<AppUser> userManager)
+    public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager)
     {
         _userManager = userManager;
+        _tokenService = tokenService;
+        _signInManager = signInManager;
     }
 
     [HttpPost("register")]
@@ -43,9 +48,10 @@ public class AccountController: ControllerBase
                 // Check if the role was added successfully
                 if (roleResult.Succeeded)
                 {
-                    return Ok(new
+                    return Ok(new ResponseRegisterDto
                     {
-                        message = "User created successfully"
+                        Email = appUser.Email!,
+                        Token = _tokenService.CreateToken(appUser)
                     });
                 }
                 else
@@ -62,6 +68,34 @@ public class AccountController: ControllerBase
         {
             return StatusCode(500, e.Message);
         }
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> LogIn([FromBody] RequestLogInDto requestLogInDto)
+    {
+        if(!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        // Check if the user exists
+        var user = await _userManager.FindByEmailAsync(requestLogInDto.Email!);
+        if (user == null)
+        {
+            return Unauthorized("Invalid Credentials");
+        }
+        // Check if the password is correct
+        var result = await _signInManager.CheckPasswordSignInAsync(user, requestLogInDto.Password!, false);
+        // If the password is InCorrect
+        if (!result.Succeeded)
+        {
+            return Unauthorized("Invalid Credentials");
+        }
+        // If the password is correct
+        return Ok(new ResponseRegisterDto
+        {
+            Email = user.Email!,
+            Token = _tokenService.CreateToken(user)
+        });
     }
     
 }
