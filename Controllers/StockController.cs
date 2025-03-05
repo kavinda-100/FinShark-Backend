@@ -2,6 +2,7 @@
 using FinSharkMarket.interfaces.stocks;
 using FinSharkMarket.Mappers.stocks;
 using FinSharkMarket.QueryParams;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinSharkMarket.Controllers;
@@ -18,6 +19,7 @@ public class StockController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAllStocks([FromQuery] StockQuery query)
     {
         // Check if the model/data is valid
@@ -34,6 +36,7 @@ public class StockController : ControllerBase
     }
     
     [HttpGet("{id:Guid}")]
+    [Authorize]
     public async Task<IActionResult> GetStockById([FromRoute] Guid id)
     {
         // Check if the model/data is valid
@@ -53,6 +56,7 @@ public class StockController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateStock([FromBody] RequestStockDto resBody)
     {
         // Check if the model/data is valid
@@ -69,6 +73,7 @@ public class StockController : ControllerBase
     }
 
     [HttpPut("{id:Guid}")]
+    [Authorize]
     public async Task<IActionResult> UpdateStock([FromRoute] Guid id, [FromBody] UpdateRequestStockDto resBody)
     {
         // Check if the model/data is valid
@@ -88,6 +93,7 @@ public class StockController : ControllerBase
     }
     
     [HttpDelete("{id:Guid}")]
+    [Authorize]
     public async Task<IActionResult> DeleteStock([FromRoute] Guid id)
     {
         // Check if the model/data is valid

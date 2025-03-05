@@ -2,6 +2,7 @@
 using FinSharkMarket.interfaces.comments;
 using FinSharkMarket.interfaces.stocks;
 using FinSharkMarket.Mappers.comments;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinSharkMarket.Controllers;
@@ -20,6 +21,7 @@ public class CommentController: ControllerBase
     }
     
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAllComments()
     {
         // Check if the model/data is valid
@@ -34,6 +36,7 @@ public class CommentController: ControllerBase
     }
     
     [HttpGet("{id:Guid}")]
+    [Authorize]
     public async Task<IActionResult> GetCommentById([FromRoute] Guid id)
     {
         // Check if the model/data is valid
@@ -52,6 +55,7 @@ public class CommentController: ControllerBase
     }
 
     [HttpPost("{stockId:Guid}")]
+    [Authorize]
     public async Task<IActionResult> CreateComment([FromRoute] Guid stockId, RequestCommentDto commentDto)
     {
         // Check if the model/data is valid
@@ -73,6 +77,7 @@ public class CommentController: ControllerBase
     }
 
     [HttpPut("{commentId:Guid}")]
+    [Authorize]
     public async Task<IActionResult> UpdateComment([FromRoute] Guid commentId, UpdateRequestCommentDto updateDto)
     {
         // Check if the model/data is valid
@@ -92,6 +97,7 @@ public class CommentController: ControllerBase
     }
     
     [HttpDelete("{commentId:Guid}")]
+    [Authorize]
     public async Task<IActionResult> DeleteComment([FromRoute] Guid commentId)
     {
         // Check if the model/data is valid
